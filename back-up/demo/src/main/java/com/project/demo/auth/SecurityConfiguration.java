@@ -26,13 +26,17 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/authenticate").permitAll()
-                        .requestMatchers(HttpMethod.POST).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+                        //.requestMatchers(HttpMethod.POST).permitAll()
                         // .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
+                .securityMatchers((matchers) -> matchers
+                        .requestMatchers("/api/**")
+                )
                 .httpBasic(withDefaults());
-        // http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

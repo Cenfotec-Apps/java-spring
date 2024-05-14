@@ -11,5 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long>  {
     List<User> findUsersWithCharacterInName(String character);
 
     @Query("SELECT u FROM User u WHERE u.name = ?1")
-    Optional<org.springframework.security.core.userdetails.User> findByName(String name);
+    Optional<User> findByName(String name);
+
+    Optional<User> findByEmail(String email);
 }

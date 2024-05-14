@@ -1,5 +1,7 @@
 package com.project.demo.auth;
-import com.project.demo.logic.entity.user.UserRepository;
+import com.project.demo.logic.entity.auth.AppUserDetails;
+import com.project.demo.logic.entity.user.AppUser;
+import com.project.demo.logic.entity.user.AppUserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,25 +29,28 @@ public class JwtTokenProvider {
     private long validityInMilliseconds;
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
 
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        Claims claims = Jwts.claims().setSubject(user.getUsername());
+    public String createToken(Authentication authentication) throws Exception {
+        try {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+            return Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(now)
+                    .setExpiration(validity)
+                    .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes()))
+                    .compact();
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
     }
 
     public boolean validateToken(String token) {
@@ -58,9 +64,10 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         String username = getUsername(token);
-        User userDetails = userRepository.findByName(username).orElseThrow(
+        AppUser foundedUser = appUserRepository.findByName(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found: " + username)
         );
+        UserDetails userDetails = new AppUserDetails(foundedUser);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

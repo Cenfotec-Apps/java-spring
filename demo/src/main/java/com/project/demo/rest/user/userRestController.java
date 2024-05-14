@@ -8,47 +8,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserRestController {
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository UserRepository;
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return UserRepository.findAll();
     }
 
     @PostMapping
     public User addUser(@RequestBody User user) {
-        return userRepository.save(user);
+        return UserRepository.save(user);
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(RuntimeException::new);
+        return UserRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @GetMapping("/filterByName/{name}")
     public List<User> getUserById(@PathVariable String name) {
-        return userRepository.findUsersWithCharacterInName(name);
+        return UserRepository.findUsersWithCharacterInName(name);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userRepository.findById(id)
+        return UserRepository.findById(id)
                 .map(existingUser -> {
                     existingUser.setName(user.getName());
                     existingUser.setEmail(user.getEmail());
-                    return userRepository.save(existingUser);
+                    return UserRepository.save(existingUser);
                 })
                 .orElseGet(() -> {
                     user.setId(id);
-                    return userRepository.save(user);
+                    return UserRepository.save(user);
                 });
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        UserRepository.deleteById(id);
     }
 }
