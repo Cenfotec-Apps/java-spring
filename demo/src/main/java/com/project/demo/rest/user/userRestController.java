@@ -3,6 +3,7 @@ package com.project.demo.rest.user;
 import com.project.demo.logic.entity.user.User;
 import com.project.demo.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public class UserRestController {
     @Autowired
     private UserRepository UserRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping
     public List<User> getAllUsers() {
         return UserRepository.findAll();
@@ -20,6 +24,7 @@ public class UserRestController {
 
     @PostMapping
     public User addUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return UserRepository.save(user);
     }
 
@@ -38,6 +43,7 @@ public class UserRestController {
         return UserRepository.findById(id)
                 .map(existingUser -> {
                     existingUser.setName(user.getName());
+                    existingUser.setLastname(user.getLastname());
                     existingUser.setEmail(user.getEmail());
                     return UserRepository.save(existingUser);
                 })
