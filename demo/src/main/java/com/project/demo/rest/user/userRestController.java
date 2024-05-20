@@ -3,6 +3,9 @@ package com.project.demo.rest.user;
 import com.project.demo.logic.entity.user.User;
 import com.project.demo.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,7 @@ public class UserRestController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public List<User> getAllUsers() {
         return UserRepository.findAll();
     }
@@ -57,4 +61,12 @@ public class UserRestController {
     public void deleteUser(@PathVariable Long id) {
         UserRepository.deleteById(id);
     }
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public User authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
+    }
+
 }
