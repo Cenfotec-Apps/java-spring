@@ -28,6 +28,13 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
+bootJar {
+	archiveBaseName.set('demo-java-spring-api')
+	archiveVersion.set('1.0.0')
+	archiveFileName.set('demo-java-spring-api-1.0.0.jar')
+	launchScript()
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
