@@ -35,5 +35,3 @@ out/
 .vscode/
 build/resources/main/application.properties
 src/main/resources/application.properties
-.gradle/
-!gradle-wrapper.properties
