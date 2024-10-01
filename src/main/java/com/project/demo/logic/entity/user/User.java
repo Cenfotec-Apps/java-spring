@@ -137,6 +137,14 @@ public class User implements UserDetails {
         return role;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     public User setRole(Role role) {
         this.role = role;
 
