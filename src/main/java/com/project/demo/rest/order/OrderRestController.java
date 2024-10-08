@@ -31,6 +31,24 @@ public class OrderRestController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping
+    public ResponseEntity<?> getAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request) {
+
+            Pageable pageable = PageRequest.of(page-1, size);
+            Page<Order> ordersPage = orderRepository.findAll(pageable);
+            Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
+            meta.setTotalPages(ordersPage.getTotalPages());
+            meta.setTotalElements(ordersPage.getTotalElements());
+            meta.setPageNumber(ordersPage.getNumber() + 1);
+            meta.setPageSize(ordersPage.getSize());
+
+            return new GlobalResponseHandler().handleResponse("Order retrieved successfully",
+                    ordersPage.getContent(), HttpStatus.OK, meta);
+    }
+
     // /orders/user/{userId}
     // /orders/user/20
 
@@ -53,7 +71,7 @@ public class OrderRestController {
             meta.setPageSize(ordersPage.getSize());
 
 
-            return new GlobalResponseHandler().handleResponse("Order created successfully",
+            return new GlobalResponseHandler().handleResponse("Order retrieved successfully",
                     ordersPage.getContent(), HttpStatus.OK, meta);
         } else {
             return new GlobalResponseHandler().handleResponse("User id " + userId + " not found"  ,
