@@ -35,7 +35,7 @@ public class OrderRestController {
     // /orders/user/20
 
     // /orders/user/1/orders?page=1&size=10
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userId}/orders")
     public ResponseEntity<?> getAllByUser (@PathVariable Long userId,
                                            @RequestParam(defaultValue = "1") int page,
                                            @RequestParam(defaultValue = "10") int size,
@@ -44,11 +44,17 @@ public class OrderRestController {
         if(foundUser.isPresent()) {
 
 
-            Pageable pageable = PageRequest.of(page, size);
+            Pageable pageable = PageRequest.of(page-1, size);
             Page<Order> ordersPage = orderRepository.getOrderByUserId(userId, pageable);
+            Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
+            meta.setTotalPages(ordersPage.getTotalPages());
+            meta.setTotalElements(ordersPage.getTotalElements());
+            meta.setPageNumber(ordersPage.getNumber() + 1);
+            meta.setPageSize(ordersPage.getSize());
+
 
             return new GlobalResponseHandler().handleResponse("Order created successfully",
-                    ordersPage.getContent(), HttpStatus.OK, request);
+                    ordersPage.getContent(), HttpStatus.OK, meta);
         } else {
             return new GlobalResponseHandler().handleResponse("User id " + userId + " not found"  ,
                     HttpStatus.NOT_FOUND, request);
@@ -85,7 +91,7 @@ public class OrderRestController {
     }
 
     @PatchMapping("/{orderId}")
-    public ResponseEntity<?> pathOrder(@PathVariable Long orderId, @RequestBody Order order, HttpServletRequest request) {
+    public ResponseEntity<?> patchOrder(@PathVariable Long orderId, @RequestBody Order order, HttpServletRequest request) {
         Optional<Order> foundOrder = orderRepository.findById(orderId);
         if(foundOrder.isPresent()) {
             if(order.getTotal() != null) foundOrder.get().setTotal(order.getTotal());
