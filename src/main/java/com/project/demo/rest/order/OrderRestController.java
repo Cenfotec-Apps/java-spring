@@ -1,25 +1,21 @@
 package com.project.demo.rest.order;
 
 import com.project.demo.logic.entity.http.GlobalResponseHandler;
-import com.project.demo.logic.entity.http.HttpResponse;
 import com.project.demo.logic.entity.http.Meta;
 import com.project.demo.logic.entity.order.Order;
 import com.project.demo.logic.entity.order.OrderRepository;
 import com.project.demo.logic.entity.user.User;
 import com.project.demo.logic.entity.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +28,7 @@ public class OrderRestController {
     private UserRepository userRepository;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -49,11 +46,8 @@ public class OrderRestController {
                     ordersPage.getContent(), HttpStatus.OK, meta);
     }
 
-    // /orders/user/{userId}
-    // /orders/user/20
-
-    // /orders/user/1/orders?page=1&size=10
     @GetMapping("/user/{userId}/orders")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getAllByUser (@PathVariable Long userId,
                                            @RequestParam(defaultValue = "1") int page,
                                            @RequestParam(defaultValue = "10") int size,
@@ -124,6 +118,7 @@ public class OrderRestController {
     }
 
     @DeleteMapping("/{orderId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, HttpServletRequest request) {
         Optional<Order> foundOrder = orderRepository.findById(orderId);
         if(foundOrder.isPresent()) {
