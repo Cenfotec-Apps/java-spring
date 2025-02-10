@@ -43,7 +43,7 @@ public class UserRestController {
         meta.setPageNumber(ordersPage.getNumber() + 1);
         meta.setPageSize(ordersPage.getSize());
 
-        return new GlobalResponseHandler().handleResponse("Order retrieved successfully",
+        return new GlobalResponseHandler().handleResponse("Users retrieved successfully",
                 ordersPage.getContent(), HttpStatus.OK, meta);
     }
 
