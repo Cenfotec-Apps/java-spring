@@ -2,6 +2,7 @@ package com.project.demo.rest.prefenceList;
 
 import com.project.demo.logic.entity.http.GlobalResponseHandler;
 import com.project.demo.logic.entity.http.Meta;
+import com.project.demo.logic.entity.movie.Movie;
 import com.project.demo.logic.entity.movie.MovieRepository;
 import com.project.demo.logic.entity.preferenceList.PreferenceList;
 import com.project.demo.logic.entity.preferenceList.PreferenceListRepository;
@@ -108,7 +109,108 @@ public class PreferenceListRestController {
         }
     }
 
+    @PatchMapping("/{Id}/addMovie")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> addMovieToPreferenceLis(@PathVariable Long Id, @RequestBody Movie movie, HttpServletRequest request ) {
+        Optional<PreferenceList> foundPrefereceList = preferenceListRepository.findById(Id);
+        if(foundPrefereceList.isPresent()) {
+            Movie toSaveMovie = new Movie();
+            if(movie.getId() != null) {
+                Optional<Movie> foundMovie = movieRepository.findById(movie.getId());
+                if(foundMovie.isPresent()) {
+                    toSaveMovie = foundMovie.get();
+                }
+            } else {
+                toSaveMovie = movie;
+            }
+            if(foundPrefereceList.get().getMovies().contains(toSaveMovie)) {
+                return new GlobalResponseHandler().handleResponse(
+                        "Movie already in the preference list",
+                        HttpStatus.BAD_REQUEST,
+                        request);
+            } else {
+                foundPrefereceList.get().getMovies().add(toSaveMovie);
+                preferenceListRepository.save(foundPrefereceList.get());
+                return new GlobalResponseHandler().handleResponse(
+                        "Movie added to the list",
+                        foundPrefereceList.get(),
+                        HttpStatus.OK,
+                        request);
 
+            }
+        } else {
+            return new GlobalResponseHandler().handleResponse(
+                    "Preference List with id " + Id + " not found",
+                    HttpStatus.NOT_FOUND,
+                    request);
+        }
+    }
 
+    @PatchMapping("/{Id}/removeMovie")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> rmMovieToPreferenceLis(@PathVariable Long Id, @RequestBody Movie movie, HttpServletRequest request ) {
+        Optional<PreferenceList> foundPrefereceList = preferenceListRepository.findById(Id);
+        if(foundPrefereceList.isPresent()) {
+            Movie toRemoveMovie = new Movie();
+            if(movie.getId() == null) {
+                return new GlobalResponseHandler().handleResponse(
+                        "Movie id is required",
+                        HttpStatus.BAD_REQUEST,
+                        request);
+            } else {
+                Optional<Movie> foundMovie = movieRepository.findById(movie.getId());
+                if(foundMovie.isPresent()) {
+                    toRemoveMovie = foundMovie.get();
+                } else {
+                    return new GlobalResponseHandler().handleResponse(
+                            "Movie not found",
+                            HttpStatus.NOT_FOUND,
+                            request);
+                }
+            }
+            if(foundPrefereceList.get().getMovies().contains(toRemoveMovie)) {
+                foundPrefereceList.get().getMovies().remove(toRemoveMovie);
+                preferenceListRepository.save(foundPrefereceList.get());
+                return new GlobalResponseHandler().handleResponse(
+                        "Movie removed from the preference list",
+                        foundPrefereceList.get(),
+                        HttpStatus.OK,
+                        request);
+            } else {
+                return new GlobalResponseHandler().handleResponse(
+                        "Movie not in the preference preference list",
+                        HttpStatus.BAD_REQUEST,
+                        request);
+            }
+        } else {
+            return new GlobalResponseHandler().handleResponse(
+                    "Preference List with id " + Id + " not found",
+                    HttpStatus.NOT_FOUND,
+                    request);
+        }
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
