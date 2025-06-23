@@ -1,0 +1,514 @@
+type: collection.insomnia.rest/5.0
+name: Proyecto 3 - Segundo
+meta:
+  id: wrk_d1d26a79b5104520bb7903181b6729e2
+  created: 1749515645249
+  modified: 1749515820005
+  description: ""
+collection:
+  - name: Team
+    meta:
+      id: fld_871c5817507d4e09b1eb572bf5cc225f
+      created: 1750708980192
+      modified: 1750708980192
+      sortKey: -1750708980192
+      description: ""
+    children:
+      - url: "{{ _.base_url }}teams?page=1&size=5"
+        name: Get all Teams (auto set Token)
+        meta:
+          id: req_02425dd95dbb40959a9857791bd11a1a
+          created: 1750709001047
+          modified: 1750711564069
+          isPrivate: false
+          description: ""
+          sortKey: -1750711555495
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/9.1.1
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+            'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+        scripts:
+          preRequest: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}teams"
+        name: Add Team (auto set token)
+        meta:
+          id: req_b6e1c88079f845fb8d42697cd10f0bd1
+          created: 1750709451713
+          modified: 1750711555138
+          isPrivate: false
+          description: ""
+          sortKey: -1750711555095
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Team A",
+              "city": "New York",
+              "foundedYear": 1990,
+              "coach": "John Doe",
+              "stadium": "Stadium A",
+              "teamLogo": "https://example.com/logo.png",
+              "isInClubsWorldCup": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/9.1.1
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+            'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+        scripts:
+          preRequest: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}teams/5"
+        name: Update Team (auto set token)
+        meta:
+          id: req_5a0534e951e94c228641ab2075954874
+          created: 1750709580759
+          modified: 1750711559734
+          isPrivate: false
+          description: ""
+          sortKey: -1750711555295
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Team B",
+              "city": "New York",
+              "founded": 1990,
+              "coach": "John Doe",
+              "stadium": "Stadium A",
+              "teamLogo": "https://example.com/logo.png",
+              "isInClubsWorldCup": true,
+            	"players": []
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/9.1.1
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+            'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+        scripts:
+          preRequest: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}teams/5"
+        name: Update Team Players (auto set token)
+        meta:
+          id: req_68666d2811624ffa98391b93777d76a8
+          created: 1750709899635
+          modified: 1750711561627
+          isPrivate: false
+          description: ""
+          sortKey: -1750711555395
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Team B",
+              "city": "New York",
+              "founded": 1990,
+              "coach": "John Doe",
+              "stadium": "Stadium A",
+              "teamLogo": "https://example.com/logo.png",
+              "isInClubsWorldCup": true,
+            	"players": [
+            		{
+            			"id": 22,
+            			"name": "Player B"
+            		},
+            		{
+            			"id": 23,
+            			"name": "Player B 2"
+            		}
+            	]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/9.1.1
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+            'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+        scripts:
+          preRequest: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}players"
+        name: Add Team Player (auto set token)
+        meta:
+          id: req_5b1a45c1ae0f493cb7ffbada9f958091
+          created: 1750710015390
+          modified: 1750711557589
+          isPrivate: false
+          description: ""
+          sortKey: -1750711555195
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Player A",
+              "team": {
+                "id": 5
+              }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/9.1.1
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+            'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+        scripts:
+          preRequest: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}teams/5"
+        name: Del Team (auto set Token)
+        meta:
+          id: req_97bc63e5d83948cdbff12a9e4c65e5df
+          created: 1750711123247
+          modified: 1750711566446
+          isPrivate: false
+          description: ""
+          sortKey: -1750711555595
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/9.1.1
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+            'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+        scripts:
+          preRequest: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - url: "{{ _.base_url }}users"
+    name: Get all Users (to set Token)
+    meta:
+      id: req_a519b57d45e64a2db29278bfa3271107
+      created: 1715441812674
+      modified: 1749519429844
+      isPrivate: false
+      description: ""
+      sortKey: -1715441812674
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/9.1.1
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlci5hZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDk1MTg0ODEsImV4cCI6MTc0OTUyMjA4MX0.OavbGcxWSBUirzizEDuJ53QRK5ji9krXeAwrYqcBUa0
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}auth/signup"
+    name: Sign up (no auth)
+    meta:
+      id: req_72a9907ad698445ca811eba6906a0aba
+      created: 1715452661482
+      modified: 1749517806460
+      isPrivate: false
+      description: ""
+      sortKey: -1715452661482
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "test", 
+        	"lastname": "test",
+        	"email": "test@gmail.com",
+        	"password": "test123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.1.1
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}auth/login"
+    name: Login User (no auth)
+    meta:
+      id: req_fce4f7ff99f2414189f901cd238a14c5
+      created: 1715468092150
+      modified: 1726542534704
+      isPrivate: false
+      description: ""
+      sortKey: -1715447527110
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "super.admin@gmail.com", 
+        	"password": "superadmin123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.1.1
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}users?page=2&size=5"
+    name: Get all Users (auto set Token)
+    meta:
+      id: req_3e4629e7065a49b1aed29874ae848624
+      created: 1715612808452
+      modified: 1749519617892
+      isPrivate: false
+      description: ""
+      sortKey: -1715441812624
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/9.1.1
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+        'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}admin"
+    name: Add admin (auth as super admin)
+    meta:
+      id: req_d495d5d96c0940d7a7900c68fbeef93e
+      created: 1716216404352
+      modified: 1726542784335
+      isPrivate: false
+      description: ""
+      sortKey: -1715450094296
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "admin", 
+        	"lastname": "admin role",
+        	"email": "admin@gmail.com",
+        	"password": "admin123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.1.1
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_614a1ae7004e4742b06586dd64b3aae2',
+        'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}users/me"
+    name: Get user profile info (auth)
+    meta:
+      id: req_455c7943885945b6bb83f70a546ef997
+      created: 1718846093745
+      modified: 1726542762541
+      isPrivate: false
+      description: ""
+      sortKey: -1715441812574
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/9.1.1
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_614a1ae7004e4742b06586dd64b3aae2',
+        'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}users/4"
+    name: Del user (auto set Token)
+    meta:
+      id: req_8b623f95d5d94acf92a370b741faefb3
+      created: 1718985509466
+      modified: 1749519034348
+      isPrivate: false
+      description: ""
+      sortKey: -1715441812599
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/9.1.1
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+        'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}products"
+    name: Get all Products (auto set Token)
+    meta:
+      id: req_63c2408cc84e4fb6afc2966854570beb
+      created: 1719154142030
+      modified: 1749518847770
+      isPrivate: false
+      description: ""
+      sortKey: -1715441812611.5
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/9.1.1
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_fce4f7ff99f2414189f901cd238a14c5',
+        'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+    scripts:
+      preRequest: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_a929e4bb088a4ae69619d91da14b30bf
+    created: 1726541004518
+    modified: 1726541004518
+environments:
+  name: Base Environment
+  meta:
+    id: env_b18a48f362d34506a07910be8dff32d3
+    created: 1726541004518
+    modified: 1726541004518
+    isPrivate: false
+  subEnvironments:
+    - name: dev
+      meta:
+        id: env_4217615a0629463ea5336188ff9d385f
+        created: 1715442086680
+        modified: 1715442160066
+        isPrivate: false
+        sortKey: 1715442086680
+      data:
+        base_url: http://localhost:8080/
+      color: "#11ff00"
+    - name: prod
+      meta:
+        id: env_5dc583fc9c9949669b866b1bf68e2e97
+        created: 1715442102658
+        modified: 1717950400534
+        isPrivate: false
+        sortKey: 1715442102658
+      data:
+        base_url: https://demo-api-spring.azurewebsites.net/
+      color: "#ff0000"
