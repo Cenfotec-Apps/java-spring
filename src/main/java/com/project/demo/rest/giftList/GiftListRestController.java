@@ -4,6 +4,8 @@ import com.project.demo.logic.entity.giftList.GiftList;
 import com.project.demo.logic.entity.giftList.GiftListRepository;
 import com.project.demo.logic.entity.http.GlobalResponseHandler;
 import com.project.demo.logic.entity.http.Meta;
+import com.project.demo.logic.entity.order.Order;
+import com.project.demo.logic.entity.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,10 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/gift-lists")
@@ -41,4 +42,33 @@ public class GiftListRestController {
         return new GlobalResponseHandler().handleResponse("Gift List retrieved successfully",
                 ordersPage.getContent(), HttpStatus.OK, meta);
     }
+
+    @PostMapping
+    public ResponseEntity<?> addGiftList(@RequestBody GiftList gifList, HttpServletRequest request) {
+        GiftList savedOrder = giftListRepository.save(gifList);
+            return new GlobalResponseHandler().handleResponse("Gift list created successfully",
+                    savedOrder, HttpStatus.CREATED, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> editGiftList(@RequestBody GiftList gifList, HttpServletRequest request) {
+        GiftList savedOrder = giftListRepository.save(gifList);
+        return new GlobalResponseHandler().handleResponse("Gift list created successfully",
+                savedOrder, HttpStatus.CREATED, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id, HttpServletRequest request) {
+        Optional<GiftList> foundItem = giftListRepository.findById(id);
+        if(foundItem.isPresent()) {
+            giftListRepository.deleteById(foundItem.get().getId());
+            return new GlobalResponseHandler().handleResponse("Gift List deleted successfully",
+                    foundItem.get(), HttpStatus.OK, request);
+        } else {
+            return new GlobalResponseHandler().handleResponse("Gift List " + id + " not found"  ,
+                    HttpStatus.NOT_FOUND, request);
+        }
+    }
+
+
 }
