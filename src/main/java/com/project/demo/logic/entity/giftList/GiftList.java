@@ -1,6 +1,11 @@
 package com.project.demo.logic.entity.giftList;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.project.demo.logic.entity.gift.Gift;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "gift_list")
 @Entity
@@ -13,11 +18,9 @@ public class GiftList {
 
     private String description;
 
-    public GiftList(Long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
+    @OneToMany(mappedBy = "giftList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("giftList")
+    private List<Gift> gifts = new ArrayList<>();
 
     public GiftList() {
     }
@@ -40,9 +43,5 @@ public class GiftList {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
